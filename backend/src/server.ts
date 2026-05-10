@@ -32,6 +32,8 @@ app.use(cors({
     if (!origin) return callback(null, true);
     // Allow any localhost port in development
     if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
+    // Allow all Vercel deployments
+    if (/\.vercel\.app$/.test(origin)) return callback(null, true);
     // Block everything else
     callback(new Error(`CORS blocked: ${origin}`));
   },
