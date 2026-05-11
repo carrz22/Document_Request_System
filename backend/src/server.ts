@@ -56,9 +56,9 @@ app.use('/api/documents', documentRoutes);
 app.use('/api/users', userRoutes);
 
 // Serve Angular frontend (production)
-app.use(express.static(path.join(__dirname, '../frontend/frontend-app/dist/document-request-frontend/browser')));
+app.use(express.static(path.join(__dirname, '../../frontend/frontend-app/dist/document-request-frontend/browser')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/frontend-app/dist/document-request-frontend/browser/index.html'));
+  res.sendFile(path.join(__dirname, '../../frontend/frontend-app/dist/document-request-frontend/browser/index.html'));
 });
 
 // Error handling
