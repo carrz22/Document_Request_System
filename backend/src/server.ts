@@ -43,6 +43,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
+// ✅ Redirect root to Swagger docs
+app.get('/', (req: Request, res: Response) => {
+  res.redirect('/api-docs');
+});
+
 // Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
