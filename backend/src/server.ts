@@ -28,13 +28,9 @@ if (firebaseInitialized) {
 // Middleware
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (Postman, curl, mobile apps)
     if (!origin) return callback(null, true);
-    // Allow any localhost port in development
     if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
-    // Allow all Vercel deployments
     if (/\.vercel\.app$/.test(origin)) return callback(null, true);
-    // Block everything else
     callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
@@ -58,6 +54,12 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/users', userRoutes);
+
+// Serve Angular frontend (production)
+app.use(express.static(path.join(__dirname, '../frontend/frontend-app/dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/frontend-app/dist/index.html'));
+});
 
 // Error handling
 app.use(errorHandler);
