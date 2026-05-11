@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -31,6 +31,7 @@ app.use(cors({
     if (!origin) return callback(null, true);
     if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
     if (/\.vercel\.app$/.test(origin)) return callback(null, true);
+    if (/\.onrender\.com$/.test(origin)) return callback(null, true);
     callback(new Error(`CORS blocked: ${origin}`));
   },
   credentials: true,
@@ -55,9 +56,18 @@ app.use('/api/auth', authRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/users', userRoutes);
 
-app.use(express.static(path.join(__dirname, '../../frontend/frontend-app/dist/document-request-frontend/browser')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/frontend-app/dist/document-request-frontend/browser/index.html'));
+// Serve Angular frontend (production)
+const frontendPath = path.join(__dirname, '../../frontend/frontend-app/dist/document-request-frontend/browser');
+app.use(express.static(frontendPath));
+
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
+  if (req.path.includes('.')) return next(); // skip .js, .css, .ico etc
+  res.sendFile(path.join(frontendPath, 'index.html'), (err) => {
+    if (err) {
+      console.error('❌ sendFile error:', err.message);
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
 });
 
 // Error handling
