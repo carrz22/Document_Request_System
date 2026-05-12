@@ -16,6 +16,22 @@ A full-stack web application for managing and processing document requests, buil
 | Language | TypeScript |
 
 ---
+## 👥 Team Roles
+
+### 🎨 Butch — Frontend Developer
+- Develop and maintain Angular components
+- Design and implement the user interface
+- Handle client-side routing and state management
+
+### ⚙️ Raejan — Backend Developer
+- Build and maintain Express.js REST APIs
+- Manage Firebase database structure
+- Implement authentication and business logic
+
+### 🚀 Carr — Deployment
+- Manage Firebase hosting and deployment pipeline
+- Configure environment variables and build scripts
+- Ensure app stability across staging and production
 
 ## ✨ Features
 
